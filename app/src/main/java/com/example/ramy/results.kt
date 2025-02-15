@@ -1,12 +1,10 @@
 package com.example.ramy
 
-import android.graphics.Bitmap
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
@@ -17,22 +15,25 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.Image
+import androidx.compose.ui.layout.ContentScale
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun Results(
+    viewModel: ProductDetectionViewModel,
     supermarketName: String,
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
     onLeaderboardClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
-    val img = remember { mutableStateOf<Bitmap?>(null) }
+    val uiState by viewModel.uiState.collectAsState()
     val orangeColor = Color(0xFFF3AF4A)
 
     Column(
@@ -40,7 +41,7 @@ fun Results(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        // Top Bar with curved bottom corners
+        // Top Bar
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
@@ -70,7 +71,7 @@ fun Results(
             }
         }
 
-        // Port Analysis Content
+        // Results content
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -83,95 +84,108 @@ fun Results(
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                // Port Remy Card
-                Card(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 8.dp),
-                    shape = RoundedCornerShape(8.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFF4A9586)
-                    )
-                ) {
-                    Text(
-                        text = "Port Remy",
-                        color = Color.White,
-                        modifier = Modifier.padding(16.dp),
-                        fontSize = 16.sp
-                    )
-                }
-
-                // Concurrent Port Card
-                Card(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 8.dp),
-                    shape = RoundedCornerShape(8.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White
-                    )
-                ) {
-                    Text(
-                        text = "Port concurrent",
-                        color = Color.Black,
-                        modifier = Modifier.padding(16.dp),
-                        fontSize = 16.sp
-                    )
+            LazyColumn {
+                items(uiState.detectionResults?.toList() ?: emptyList()) { (product, count) ->
+                    if (count > 0) {
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp),
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .padding(16.dp)
+                                    .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(text = product)
+                                Text(text = count.toString(), fontWeight = FontWeight.Bold)
+                            }
+                        }
+                    }
                 }
             }
-
-            Text(
-                text = "Details :",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
-                modifier = Modifier.padding(top = 24.dp)
-            )
         }
 
         // Bottom Navigation
-        NavigationBar(
+        Card(
             modifier = Modifier
-                .padding(horizontal = 4.dp)
-                .height(64.dp),
-            containerColor = Color.White
+                .fillMaxWidth()
+                .padding(8.dp),
+            shape = RoundedCornerShape(16.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
         ) {
-            NavigationBarItem(
-                icon = { Icon(Icons.Default.Home, "Home") },
-                selected = false,
-                onClick = { onHomeClick() }
-            )
-            NavigationBarItem(
-                icon = {
-                    Image(
-                        painter = painterResource(id = R.drawable.lead),
-                        contentDescription = "Leaderboard",
-                        modifier = Modifier.size(24.dp)
-                    )
-                },
-                selected = false,
-                onClick = { onLeaderboardClick() }
-            )
-            NavigationBarItem(
-                icon = {
-                    Icon(
-                        Icons.Default.Notifications,
-                        contentDescription = "Notifications",
-                        modifier = Modifier.size(24.dp),
-                        tint = Color.Black
-                    )
-                },
-                selected = false,
-                onClick = { /* Handle notifications */ }
-            )
-            NavigationBarItem(
-                icon = { Icon(Icons.Default.Person, "Profile") },
-                selected = false,
-                onClick = { onProfileClick() }
-            )
+            NavigationBar(
+                modifier = Modifier
+                    .padding(horizontal = 4.dp)
+                    .height(64.dp),
+                containerColor = Color.White
+            ) {
+                NavigationBarItem(
+                    icon = {
+                        Box(
+                            modifier = Modifier
+                                .background(orangeColor, shape = RoundedCornerShape(8.dp))
+                                .padding(horizontal = 12.dp, vertical = 6.dp)
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                Icon(
+                                    Icons.Default.Home,
+                                    contentDescription = "Home",
+                                    modifier = Modifier.size(24.dp),
+                                    tint = Color.White
+                                )
+                                Text("Home", color = Color.White)
+                            }
+                        }
+                    },
+                    selected = false,
+                    onClick = { /* Already on home screen */ }
+                )
+
+                NavigationBarItem(
+                    icon = {
+                        Image(
+                            painter = painterResource(id = R.drawable.lead),
+                            contentDescription = "Leaderboard",
+                            modifier = Modifier.size(24.dp),
+                            contentScale = ContentScale.Fit
+                        )
+                    },
+                    selected = false,
+                    onClick = { onLeaderboardClick() }  // Added navigation to leaderboard
+                )
+
+                NavigationBarItem(
+                    icon = {
+                        Icon(
+                            Icons.Default.Notifications,
+                            contentDescription = "Notifications",
+                            modifier = Modifier.size(24.dp),
+                            tint = Color.Black
+                        )
+                    },
+                    selected = false,
+                    onClick = { /* Handle notifications */ }
+                )
+
+                NavigationBarItem(
+                    icon = {
+                        Icon(
+                            Icons.Default.Person,
+                            contentDescription = "Profile",
+                            modifier = Modifier.size(24.dp),
+                            tint = Color.Black
+                        )
+                    },
+                    selected = false,
+                    onClick = { onProfileClick() }  // Added navigation to profile
+                )
+            }
         }
     }
 }

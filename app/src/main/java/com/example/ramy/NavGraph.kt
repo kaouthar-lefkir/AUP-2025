@@ -1,6 +1,7 @@
 package com.example.ramy
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -15,7 +16,6 @@ sealed class Screen(val route: String) {
     object Leaderboard : Screen("leaderboard")
     object Profile : Screen("profile")
 
-    // Fixed createRoute function
     fun createRoute(vararg args: String): String {
         var tempRoute = route
         args.forEach { arg ->
@@ -27,6 +27,8 @@ sealed class Screen(val route: String) {
 
 @Composable
 fun NavGraph(navController: NavHostController) {
+    val viewModel: ProductDetectionViewModel = viewModel()
+
     NavHost(
         navController = navController,
         startDestination = Screen.Splash.route
@@ -45,7 +47,7 @@ fun NavGraph(navController: NavHostController) {
             HomeScreen(
                 onSupermarketClick = { supermarketName ->
                     navController.navigate(
-                        Screen.Camera.route.replace("{supermarketName}", supermarketName)
+                        Screen.Camera.createRoute("supermarketName=$supermarketName")
                     )
                 },
                 onLeaderboardClick = {
@@ -63,13 +65,12 @@ fun NavGraph(navController: NavHostController) {
         ) { backStackEntry ->
             val supermarketName = backStackEntry.arguments?.getString("supermarketName") ?: ""
             CameraPage(
+                viewModel = viewModel,
                 supermarketName = supermarketName,
                 onImageCaptured = {
                     navController.navigate(
-                        Screen.Results.route.replace("{supermarketName}", supermarketName)
-                    ) {
-                        popUpTo(Screen.Camera.route) { inclusive = true }
-                    }
+                        Screen.Results.createRoute("supermarketName=$supermarketName")
+                    )
                 },
                 onBackClick = { navController.popBackStack() },
                 onHomeClick = {
@@ -78,7 +79,8 @@ fun NavGraph(navController: NavHostController) {
                     }
                 },
                 onLeaderboardClick = { navController.navigate(Screen.Leaderboard.route) },
-                onProfileClick = { navController.navigate(Screen.Profile.route) }
+                onProfileClick = { navController.navigate(Screen.Profile.route) },
+                onNotificationsClick = { /* Handle notifications */ }
             )
         }
 
@@ -88,6 +90,7 @@ fun NavGraph(navController: NavHostController) {
         ) { backStackEntry ->
             val supermarketName = backStackEntry.arguments?.getString("supermarketName") ?: ""
             Results(
+                viewModel = viewModel,
                 supermarketName = supermarketName,
                 onBackClick = { navController.popBackStack() },
                 onHomeClick = {
@@ -107,9 +110,7 @@ fun NavGraph(navController: NavHostController) {
                         popUpTo(Screen.Home.route) { inclusive = true }
                     }
                 },
-                onLeaderboardClick = {
-                    // Already on leaderboard, no action needed
-                },
+                onLeaderboardClick = { /* Already on leaderboard */ },
                 onProfileClick = { navController.navigate(Screen.Profile.route) }
             )
         }
@@ -122,9 +123,7 @@ fun NavGraph(navController: NavHostController) {
                     }
                 },
                 onLeaderboardClick = { navController.navigate(Screen.Leaderboard.route) },
-                onProfileClick = {
-                    // Already on profile, no action needed
-                }
+                onProfileClick = { /* Already on profile */ }
             )
         }
     }
