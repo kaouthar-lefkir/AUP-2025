@@ -34,377 +34,219 @@ fun ProfileHome(
     val orangeColor = Color(0xFFF3AF4A)
     val lightGrayBg = Color(0xFFF5F5F5)
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(lightGrayBg)
     ) {
-        Column(
+        // Header with orange background
+        Box(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
+                .height(160.dp)  // Reduced height
+                .background(
+                    color = orangeColor,
+                    shape = RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp)
+                )
+                .padding(16.dp)
         ) {
-            // Header with orange background
-            Box(
+            Text(
+                text = "Mon Profile",
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                color = Color.Black,
+                modifier = Modifier.padding(top = 16.dp)
+            )
+        }
+
+        // Profile Card
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .offset(y = (-50).dp),  // Reduced offset
+            shape = RoundedCornerShape(16.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        ) {
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(180.dp)
-                    .background(
-                        color = orangeColor,
-                        shape = RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp)
-                    )
-                    .padding(16.dp)
+                    .padding(12.dp),  // Reduced padding
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Box(
+                    modifier = Modifier
+                        .size(70.dp)  // Smaller profile picture
+                        .clip(CircleShape)
+                        .background(Color.White),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.profile),
+                        contentDescription = "Profile",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(6.dp))
+
                 Text(
-                    text = "Mon Profile",
+                    text = "Mohammed Amine",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    color = Color.Black,
-                    modifier = Modifier.padding(top = 16.dp)
+                    fontSize = 16.sp,  // Smaller text
+                    color = Color.Black
+                )
+
+                Text(
+                    text = "mohamed@gmail.com",
+                    fontSize = 12.sp,  // Smaller text
+                    color = Color.Black.copy(alpha = 0.7f)
+                )
+
+                Text(
+                    text = "081221447684",
+                    fontSize = 12.sp,  // Smaller text
+                    color = Color.Black.copy(alpha = 0.7f)
                 )
             }
-
-            // Profile Card
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .offset(y = (-60).dp),
-                shape = RoundedCornerShape(16.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(80.dp)
-                            .clip(CircleShape)
-                            .background(Color.White),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.profile),
-                            contentDescription = "Profile",
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Text(
-                        text = "Mohammed Amine",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        color = Color.Black
-                    )
-
-                    Text(
-                        text = "mohamed@gmail.com",
-                        fontSize = 14.sp,
-                        color = Color.Black.copy(alpha = 0.7f)
-                    )
-
-                    Text(
-                        text = "081221447684",
-                        fontSize = 14.sp,
-                        color = Color.Black.copy(alpha = 0.7f)
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height((-40).dp))
-
-            // Points Card
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                shape = RoundedCornerShape(16.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.flame),
-                                contentDescription = "Streak",
-                                tint = orangeColor,
-                                modifier = Modifier.size(24.dp)
-                            )
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(
-                                text = "0 Days",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 16.sp
-                            )
-                        }
-                    }
-                    Column(horizontalAlignment = Alignment.End) {
-                        Text(
-                            text = "vous avez:",
-                            fontSize = 14.sp,
-                            color = Color.Gray
-                        )
-                        Text(
-                            text = "125 points",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp
-                        )
-                    }
-                }
-            }
-
-            // Calendar Section
-            CalendarSection()
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            // Updated Bottom Navigation
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                shape = RoundedCornerShape(16.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-            ) {
-                NavigationBar(
-                    modifier = Modifier
-                        .padding(horizontal = 4.dp)
-                        .height(64.dp),
-                    containerColor = Color.White
-                ) {
-                    NavigationBarItem(
-                        icon = {
-                            Icon(
-                                Icons.Default.Home,
-                                contentDescription = "Home",
-                                modifier = Modifier.size(24.dp),
-                                tint = Color.Black
-                            )
-                        },
-                        selected = false,
-                        onClick = onHomeClick
-                    )
-
-                    NavigationBarItem(
-                        icon = {
-                            Image(
-                                painter = painterResource(id = R.drawable.lead),
-                                contentDescription = "Leaderboard",
-                                modifier = Modifier.size(24.dp),
-                                contentScale = ContentScale.Fit
-                            )
-                        },
-                        selected = false,
-                        onClick = onLeaderboardClick
-                    )
-
-                    NavigationBarItem(
-                        icon = {
-                            Icon(
-                                Icons.Default.Notifications,
-                                contentDescription = "Notifications",
-                                modifier = Modifier.size(24.dp),
-                                tint = Color.Black
-                            )
-                        },
-                        selected = false,
-                        onClick = { /* Handle notifications */ }
-                    )
-
-                    NavigationBarItem(
-                        icon = {
-                            Box(
-                                modifier = Modifier
-                                    .background(orangeColor, shape = RoundedCornerShape(8.dp))
-                                    .padding(horizontal = 12.dp, vertical = 6.dp)
-                            ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                                ) {
-                                    Icon(
-                                        Icons.Default.Person,
-                                        contentDescription = "Profile",
-                                        modifier = Modifier.size(22.dp),
-                                        tint = Color.White
-                                    )
-                                    Text("Profile", color = Color.White)
-                                }
-                            }
-                        },
-                        selected = false,
-                        onClick = onProfileClick
-                    )
-                }
-            }
         }
-    }
-}
 
-
-
-@Composable
-fun CalendarSection() {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),  // Reduced vertical padding
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        Column(modifier = Modifier.padding(12.dp)) {  // Reduced padding
-            // Header with month and navigation
+        // Points Card
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .offset(y = (-40).dp),  // Added offset to move up
+            shape = RoundedCornerShape(16.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .padding(12.dp)  // Reduced padding
+                    .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    Icons.Default.KeyboardArrowLeft,
-                    contentDescription = "Previous",
-                    modifier = Modifier
-                        .size(20.dp)  // Smaller icons
-                        .clickable { /* Handle previous month */ }
-                )
-                Text(
-                    text = "JAN 2022",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp  // Smaller text
-                )
-                Icon(
-                    Icons.Default.KeyboardArrowRight,
-                    contentDescription = "Next",
-                    modifier = Modifier
-                        .size(20.dp)  // Smaller icons
-                        .clickable { /* Handle next month */ }
-                )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))  // Reduced spacing
-
-            // Weekday headers
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                listOf("MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN").forEach { day ->
+                Column {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.flame),
+                            contentDescription = "Streak",
+                            tint = orangeColor,
+                            modifier = Modifier.size(20.dp)  // Smaller icon
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = "0 Days",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 14.sp  // Smaller text
+                        )
+                    }
+                }
+                Column(horizontalAlignment = Alignment.End) {
                     Text(
-                        text = day,
-                        fontSize = 10.sp,  // Smaller text
-                        color = Color.Gray,
-                        modifier = Modifier.weight(1f),
-                        textAlign = TextAlign.Center
+                        text = "vous avez:",
+                        fontSize = 12.sp,  // Smaller text
+                        color = Color.Gray
+                    )
+                    Text(
+                        text = "125 points",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp  // Smaller text
                     )
                 }
             }
+        }
 
-            Spacer(modifier = Modifier.height(4.dp))  // Reduced spacing
+        // Calendar Section with reduced height
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .offset(y = (-30).dp),  // Added offset to move up
+            shape = RoundedCornerShape(16.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        ) {
+            Column(modifier = Modifier.padding(8.dp)) {
+                // Header with month and navigation
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        Icons.Default.KeyboardArrowLeft,
+                        contentDescription = "Previous",
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Text(
+                        text = "JAN 2022",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 12.sp
+                    )
+                    Icon(
+                        Icons.Default.KeyboardArrowRight,
+                        contentDescription = "Next",
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
 
-            // Calendar grid
-            val daysInMonth = 31
-            val firstDayOffset = 0 // Assuming month starts on Monday
+                Spacer(modifier = Modifier.height(4.dp))
 
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(7),
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                userScrollEnabled = false  // Disable scrolling
-            ) {
-                items(42) { index ->
-                    val day = index - firstDayOffset + 1
-                    if (day in 1..daysInMonth) {
-                        CalendarDay(
-                            day = day,
-                            hasYellowDot = day in listOf(2, 3, 11, 14, 16),
-                            hasFire = day in 13..18 || day in 20..21
+                // Weekday headers
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    listOf("M", "T", "W", "T", "F", "S", "S").forEach { day ->
+                        Text(
+                            text = day,
+                            fontSize = 10.sp,
+                            color = Color.Gray,
+                            modifier = Modifier.weight(1f),
+                            textAlign = TextAlign.Center
                         )
-                    } else {
-                        Spacer(modifier = Modifier.size(32.dp))  // Smaller spacing
+                    }
+                }
+
+                // Calendar grid with smaller days
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(7),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(160.dp),  // Fixed height for calendar
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    userScrollEnabled = false
+                ) {
+                    items(42) { index ->
+                        val day = index + 1
+                        if (day <= 31) {
+                            Box(
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .padding(2.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = day.toString(),
+                                    fontSize = 10.sp,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
                     }
                 }
             }
         }
-    }
-}
 
-@Composable
-fun CalendarDay(
-    day: Int,
-    hasYellowDot: Boolean = false,
-    hasFire: Boolean = false
-) {
-    Column(
-        modifier = Modifier
-            .padding(2.dp)  // Reduced padding
-            .size(32.dp),   // Smaller size
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Box(
-            modifier = Modifier
-                .size(24.dp)  // Smaller size
-                .then(
-                    if (hasFire) Modifier.background(
-                        color = Color(0xFFFFE4B5),
-                        shape = CircleShape
-                    ) else Modifier
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = day.toString(),
-                fontSize = 12.sp,  // Smaller text
-                textAlign = TextAlign.Center
-            )
+        Spacer(modifier = Modifier.weight(1f))
 
-            if (hasFire) {
-                Icon(
-                    painter = painterResource(id = R.drawable.flame),
-                    contentDescription = "Fire",
-                    modifier = Modifier
-                        .size(12.dp)  // Smaller icon
-                        .offset(x = 6.dp, y = (-6).dp),  // Adjusted offset
-                    tint = Color(0xFFFF6B35)
-                )
-            }
-        }
-
-        if (hasYellowDot) {
-            Box(
-                modifier = Modifier
-                    .size(4.dp)  // Smaller dot
-                    .background(Color(0xFFFFD700), CircleShape)
-            )
-        }
-    }
-}
-
-@Composable
-fun BottomNavigation() {
-    val orangeColor = Color(0xFFF3AF4A)
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-    ) {
+        // Bottom Navigation
         NavigationBar(
             modifier = Modifier
-                .padding(horizontal = 4.dp)
-                .height(64.dp),
+                .fillMaxWidth()
+                .height(60.dp),
             containerColor = Color.White
         ) {
             NavigationBarItem(
@@ -412,46 +254,43 @@ fun BottomNavigation() {
                     Icon(
                         Icons.Default.Home,
                         contentDescription = "Home",
-                        modifier = Modifier.size(24.dp),
-                        tint = Color.Black
+                        modifier = Modifier.size(24.dp)
                     )
                 },
-                label = null,
                 selected = false,
-                onClick = { /* Handle home navigation */ }
+                onClick = onHomeClick
             )
+
             NavigationBarItem(
                 icon = {
                     Image(
                         painter = painterResource(id = R.drawable.lead),
-                        contentDescription = "Phone Icon",
-                        modifier = Modifier.size(24.dp),
-                        contentScale = ContentScale.Fit
+                        contentDescription = "Leaderboard",
+                        modifier = Modifier.size(24.dp)
                     )
                 },
-                label = null,
                 selected = false,
-                onClick = { /* Handle store */ }
+                onClick = onLeaderboardClick
             )
+
             NavigationBarItem(
                 icon = {
                     Icon(
                         Icons.Default.Notifications,
                         contentDescription = "Notifications",
-                        modifier = Modifier.size(24.dp),
-                        tint = Color.Black
+                        modifier = Modifier.size(24.dp)
                     )
                 },
-                label = null,
                 selected = false,
                 onClick = { /* Handle notifications */ }
             )
+
             NavigationBarItem(
                 icon = {
                     Box(
                         modifier = Modifier
                             .background(orangeColor, shape = RoundedCornerShape(8.dp))
-                            .padding(horizontal = 12.dp, vertical = 6.dp)
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -460,16 +299,19 @@ fun BottomNavigation() {
                             Icon(
                                 Icons.Default.Person,
                                 contentDescription = "Profile",
-                                modifier = Modifier.size(22.dp),
+                                modifier = Modifier.size(20.dp),
                                 tint = Color.White
                             )
-                            Text("Profile", color = Color.White)
+                            Text(
+                                "Profile",
+                                color = Color.White,
+                                fontSize = 12.sp
+                            )
                         }
                     }
                 },
-                label = null,
                 selected = false,
-                onClick = { /* Handle profile */ }
+                onClick = onProfileClick
             )
         }
     }
